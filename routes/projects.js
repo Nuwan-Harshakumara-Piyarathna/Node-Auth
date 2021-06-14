@@ -3,19 +3,25 @@ const router = express.Router();
 const Project = require('../models/project');
 const mongoose = require('mongoose')
 const {authenticateToken} = require('../middleware/auth');
+const {setProject,authGetProject,authDeleteProject} = require('../middleware/project');
+const {authUser ,authRole} = require('../middleware/basicAuth');
+const {scopedProjects} = require('../permissions/project');
 
 // get all projects
-router.get('/all',authenticateToken, async(req,res) => {
-    await Project.find()
-        .exec().
-        then(docs => {
-            console.log(docs);
-            res.status(200).json(docs);
-        }).catch(err => {
-            console.log(err);
-            res.status(500).json({error: err});
-        });
+router.get('/all',authenticateToken, async (req,res) => {
+    const projects = await scopedProjects(req.body.user);
+    res.json({ projects });
 });
+
+router.get('/find/:id', setProject, authUser, authGetProject , (req,res) => {
+    res.status(200).json({project:req.project});    
+})  
+
+router.delete('/delete/:id', setProject, authUser, authDeleteProject , (req,res) => {
+    //write delete function here
+
+    res.send('Deleted Prject');
+})
 
 // add a new user
 router.post('/add', authenticateToken ,async(req,res) => {
@@ -33,5 +39,6 @@ router.post('/add', authenticateToken ,async(req,res) => {
         res.status(500).json({error: err});
     }); 
 });
+
 
 module.exports = router;

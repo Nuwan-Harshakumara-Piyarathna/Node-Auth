@@ -28,7 +28,7 @@ const projectRoutes = require('./routes/projects');
 app.use('/projects', projectRoutes);
 
 const authRoutes = require('./routes/auth');
-app.use('/',authRoutes);
+app.use('/auth',authRoutes);
 
 //Error handling
 app.use((req, res, next) => {

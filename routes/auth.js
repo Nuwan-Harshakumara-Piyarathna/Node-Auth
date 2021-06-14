@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 
 const jwt = require('jsonwebtoken');
 const {generateAccessToken} = require('../middleware/auth');
-
+const {authUser ,authRole} = require('../middleware/basicAuth');
 let refreshTokens = [];
 
 router.post('/login', async (req,res) => {
@@ -81,8 +81,33 @@ router.post('/token', (req,res) => {
     })
 })
 
+//testing
+router.get('/',(req,res) => {
+    res.send('Home Page');
+})
 
+router.get('/dashboard',authUser, (req,res) => {
+    res.send('Dashboard Page');
+})
 
+router.get('/admin', authUser, authRole('ADMIN'), (req,res) => {
+    res.send('Admin Page');
+})
+
+setUser = async (req,res,next) => {
+    const userId = req.body.userId;
+    if(userId){
+        await User.findById(userId)
+        .exec()
+        .then(user => {
+            req.user = user;
+        })
+        .catch(e => {
+            res.status(500).json({error: e});
+        })
+    }
+    next()
+}
 
 
 module.exports = router;

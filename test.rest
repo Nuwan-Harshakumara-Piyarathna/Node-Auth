@@ -1,0 +1,30 @@
+GET http://localhost:9000/users/all
+
+###
+
+GET http://localhost:9000/projects/all
+
+
+###
+
+POST http://localhost:9000/projects/add
+Content-Type: application/json
+
+{
+    "name":"Kasun's second Project",
+    "userId":"60c1c4b038470f1e0038a696"
+}
+
+###
+
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "userName":"Thilina",
+    "password":"1234"
+}
+
+###
+
+GET http://localhost:9000/projects?id=60c4623c935c1b2d70d4a35b
