@@ -1,2 +1,2 @@
 # Node-Auth
-Node Authentication Authorization for self use
+Node Authentication Authorization
